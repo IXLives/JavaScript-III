@@ -72,4 +72,4 @@ const jacob = new Man({
     hasGender: true
 });
 
-console.log(jacob);
+console.log(jacob.tenHut());
