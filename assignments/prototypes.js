@@ -39,6 +39,7 @@ function CharacterStats(charAttrs) {
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
 CharacterStats.prototype.takeDamage = function() {
+  this.healthPoints -= 1;
   return `${this.name} took damage.`;
 };
 
@@ -141,13 +142,65 @@ Humanoid.prototype.greet = function() {
 
   function Hero(heroAttrs) {
     Humanoid.call(this, heroAttrs);
+    this.heroicMove = heroAttrs.heroicMove;
   }
   Hero.prototype = Object.create(Humanoid.prototype);
-  
+  Hero.prototype.bash = function(target) {
+    target.healthPoints -= 1;
+    if (target.healthPoints > 0) {   
+       return `${this.name} uses ${this.heroicMove} to smite ${target.name}.`;
+    } else {
+      target.destroy();
+    }
+  };
  
   function Villain(villainAttrs) {
     Humanoid.call(this, villainAttrs);
+    this.villainStrike = villainAttrs.villainStrike;
   }
   Villain.prototype = Object.create(Humanoid.prototype);
 
-   
+  Villain.prototype.gnash = function(target) {
+    target.healthPoints -= 1;
+    if (target.healthPoints > 0){
+      return `${this.name} uses ${this.villainStrike} to slash ${target.name}.`;
+    } else {
+      target.destroy();
+    }
+  };
+
+  const Therebor = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 2,
+      width: 1,
+      height: 2,
+    },
+    healthPoints: 35,
+    name: 'Therebor',
+    team: 'Paladin',
+    weapons: [
+      'Graknir, Fang of the Great Dragon',
+    ],
+    language: 'Common Tongue',
+    heroicMove: 'Dragon Fang Strike!'
+  });
+
+  const Verzinir = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 1,
+      height: 4,
+    },
+    healthPoints: 50,
+    name: 'Verzinir',
+    team: 'Lich',
+    weapons: [
+      'Frostmourne, Blade of the Damned',
+    ],
+    language: 'Telepathic',
+    villainStrike: 'Vivisection'
+  });
+
+  console.log(Verzinir.gnash(Therebor));
